@@ -1,0 +1,37 @@
+{
+    "name": "koa-server",
+    "version": "1.0.0",
+    "description": "",
+    "keywords": [],
+    "homepage": "https://github.com/amazingdudu/koa-server#readme",
+    "bugs": {
+        "url": "https://github.com/amazingdudu/koa-server/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/amazingdudu/koa-server.git"
+    },
+    "license": "ISC",
+    "author": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "nodemon ./src/app.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+        "@koa/router": "^10.0.0",
+        "dotenv": "^10.0.0",
+        "koa": "^2.13.1",
+        "koa-bodyparser": "^4.3.0"
+    },
+    "devDependencies": {
+        "eslint": "^7.26.0",
+        "eslint-config-airbnb-base": "^14.2.1",
+        "eslint-config-prettier": "^8.3.0",
+        "eslint-plugin-import": "^2.22.1",
+        "husky": "^6.0.0",
+        "prettier": "^2.3.0",
+        "prettier-plugin-packagejson": "^2.2.11",
+        "pretty-quick": "^3.1.0"
+    }
+}
