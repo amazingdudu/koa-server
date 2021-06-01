@@ -7,7 +7,7 @@ const service = require('../service/user');
 //     password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
 // });
 
-async function validate(ctx, next) {
+async function registerValidate(ctx, next) {
     const { username, password } = ctx.request.body;
 
     // const { error } = schema.validate({ username: 'abc', password: '19uuiu94' });
@@ -28,5 +28,5 @@ async function validate(ctx, next) {
 }
 
 module.exports = {
-    validate
+    registerValidate
 };

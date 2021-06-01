@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');
+
 const service = require('../service/user');
 const cryptoPassword = require('../utils/cryptoPassword');
 
@@ -21,9 +23,24 @@ async function loginValidate(ctx, next) {
         return;
     }
 
+    ctx.user = user;
+
     await next();
 }
 
+async function checkLogin(ctx, next) {
+    const token = ctx.get('Authorization')?.split(' ')[1];
+
+    try {
+        const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
+        ctx.user = decoded;
+        await next();
+    } catch (err) {
+        ctx.throw(401, '未登录');
+    }
+}
+
 module.exports = {
-    loginValidate
+    loginValidate,
+    checkLogin
 };

@@ -1,8 +1,24 @@
+const jwt = require('jsonwebtoken');
+
 class AuthController {
     async login(ctx) {
-        const { username, password } = ctx.request.body;
+        const { username, id } = ctx.user;
+        const token = jwt.sign(
+            {
+                id,
+                username
+            },
+            process.env.TOKEN_SECRET,
+            {
+                expiresIn: '7d'
+            }
+        );
 
-        ctx.body = '登录成功';
+        ctx.body = {
+            code: 0,
+            message: `登录成功${username}`,
+            token
+        };
     }
 }
 
