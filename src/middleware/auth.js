@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const userService = require('../service/user');
-const postService = require('../service/post');
+const authService = require('../service/auth');
 const cryptoPassword = require('../utils/cryptoPassword');
 
 async function loginValidate(ctx, next) {
@@ -44,18 +44,20 @@ async function checkLogin(ctx, next) {
     await next();
 }
 
-async function checkPermission(ctx, next) {
-    const permission = await postService.checkPermission(ctx.user.id, ctx.request.body.id);
+function checkAuth(tableName) {
+    return async function checkAuth(ctx, next) {
+        const permission = await authService.checkAuth(tableName, ctx.request.body.id, ctx.user.id);
 
-    if (!permission) {
-        ctx.throw(403, '无权限');
-    } else {
-        await next();
-    }
+        if (!permission) {
+            ctx.throw(403, '无权限');
+        } else {
+            await next();
+        }
+    };
 }
 
 module.exports = {
     loginValidate,
     checkLogin,
-    checkPermission
+    checkAuth
 };

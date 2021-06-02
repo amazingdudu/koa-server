@@ -19,7 +19,7 @@ class PostService {
         return result;
     }
 
-    async update({id, content}) {
+    async update({ id, content }) {
         console.log(id);
 
         const sql = `UPDATE post SET content = ? WHERE id = ?;`;
@@ -28,14 +28,6 @@ class PostService {
 
         console.log(result);
         return result;
-    }
-
-    async checkPermission(userId, postId) {
-        const querySql = `SELECT * FROM post WHERE user_id = ? AND id = ?;`;
-
-        const result = (await connection.execute(querySql, [userId, postId]))[0][0];
-
-        return !!result;
     }
 }
 

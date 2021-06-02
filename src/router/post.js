@@ -9,13 +9,13 @@ router.post('/create', authMiddleware.checkLogin, controller.create);
 router.post(
     '/remove',
     authMiddleware.checkLogin,
-    authMiddleware.checkPermission,
+    authMiddleware.checkAuth('post'),
     controller.remove
 );
 router.post(
     '/update',
     authMiddleware.checkLogin,
-    authMiddleware.checkPermission,
+    authMiddleware.checkAuth('post'),
     controller.update
 );
 
