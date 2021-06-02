@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 
-const service = require('../service/user');
+const userService = require('../service/user');
+const postService = require('../service/post');
 const cryptoPassword = require('../utils/cryptoPassword');
 
 async function loginValidate(ctx, next) {
@@ -11,7 +12,7 @@ async function loginValidate(ctx, next) {
         return;
     }
 
-    const user = await service.getUserByName(username);
+    const user = await userService.getUserByName(username);
 
     if (!user) {
         ctx.throw(400, '用户不存在');
@@ -34,13 +35,27 @@ async function checkLogin(ctx, next) {
     try {
         const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
         ctx.user = decoded;
-        await next();
     } catch (err) {
-        ctx.throw(401, '未登录');
+        console.log(err);
+        ctx.throw(401, '未登录!');
+        return;
+    }
+    // 不要放在try里面，会捕获next异常
+    await next();
+}
+
+async function checkPermission(ctx, next) {
+    const permission = await postService.checkPermission(ctx.user.id, ctx.request.body.id);
+
+    if (!permission) {
+        ctx.throw(403, '无权限');
+    } else {
+        await next();
     }
 }
 
 module.exports = {
     loginValidate,
-    checkLogin
+    checkLogin,
+    checkPermission
 };
