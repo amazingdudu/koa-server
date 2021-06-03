@@ -23,4 +23,6 @@ router.post(
     controller.remove
 );
 
+router.get('/list/:id', authMiddleware.checkLogin, controller.list);
+
 module.exports = router;

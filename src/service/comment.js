@@ -30,8 +30,15 @@ class CommentService {
 
         const result = await connection.execute(sql, [content, id]);
 
-        console.log(result);
         return result;
+    }
+
+    async list(postId) {
+        const sql = `SELECT * FROM comment WHERE post_id = ?;`;
+
+        const result = await connection.execute(sql, [postId]);
+
+        return result[0];
     }
 }
 

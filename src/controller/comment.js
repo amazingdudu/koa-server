@@ -46,6 +46,17 @@ class CommentController {
             message: '评论更新成功'
         };
     }
+
+    async list(ctx) {
+        console.log(ctx.params);
+        const data = await service.list(ctx.params.id);
+
+        ctx.body = {
+            code: 0,
+            message: '获取评论列表成功',
+            data
+        };
+    }
 }
 
 module.exports = new CommentController();

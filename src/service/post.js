@@ -9,25 +9,72 @@ class PostService {
         return result;
     }
 
-    async remove(postId) {
-        console.log(postId);
-
+    async remove(id) {
         const sql = `DELETE FROM post WHERE id = ?;`;
 
-        const result = await connection.execute(sql, [postId]);
+        const result = await connection.execute(sql, [id]);
 
         return result;
     }
 
     async update({ id, content }) {
-        console.log(id);
-
         const sql = `UPDATE post SET content = ? WHERE id = ?;`;
 
         const result = await connection.execute(sql, [content, id]);
 
-        console.log(result);
         return result;
+    }
+
+    async list(userId) {
+        const sql = `SELECT
+                        p.id id,
+                        p.content content,
+                        JSON_OBJECT(
+                            'id',
+                            u.id,
+                            'username',
+                            u.username 
+                        ) author ,
+                        (SELECT COUNT(*) FROM comment c WHERE c.post_id = p.id) commentCount
+                    FROM
+                        post p
+                        LEFT JOIN user u ON p.user_id = u.id 
+                    WHERE
+                    p.user_id = ?`;
+
+        const result = await connection.execute(sql, [userId]);
+
+        return result[0];
+    }
+
+    async detail(id) {
+        const sql = `SELECT
+                        p.id id,
+                        p.content content,
+                        p.createAt createTime,
+                        JSON_OBJECT(
+                            'id',
+                            u.id,
+                            'username',
+                            u.username 
+                        ) author,
+                        JSON_ARRAYAGG(
+                            JSON_OBJECT(
+                                'id',
+                                c.id,
+                                'content',
+                                c.content 
+                            )) comments 
+                     FROM
+                        post p
+                        LEFT JOIN user u ON p.user_id = u.id
+                        LEFT JOIN comment c ON p.id = c.post_id 
+                     WHERE
+                        p.id = ${id};`;
+    
+        const result = await connection.execute(sql, [id]);
+       
+        return result[0];
     }
 }
 

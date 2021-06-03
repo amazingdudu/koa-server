@@ -29,6 +29,26 @@ class PostController {
             message: '更新成功'
         };
     }
+
+    async list(ctx) {
+       const data = await service.list(ctx.user.id);
+
+        ctx.body = {
+            code: 0,
+            message: '动态列表',
+            data
+        };
+    }
+
+    async detail(ctx) {
+        const data = await service.detail(ctx.params.id);
+ 
+         ctx.body = {
+             code: 0,
+             message: '动态详情',
+             data
+         };
+     }
 }
 
 module.exports = new PostController();

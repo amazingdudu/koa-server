@@ -19,4 +19,8 @@ router.post(
     controller.update
 );
 
+router.get('/list', authMiddleware.checkLogin, controller.list);
+
+router.get('/detail/:id', authMiddleware.checkLogin, controller.detail);
+
 module.exports = router;
