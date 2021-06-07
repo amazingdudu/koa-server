@@ -58,22 +58,23 @@ class PostService {
                             'username',
                             u.username 
                         ) author,
-                        JSON_ARRAYAGG(
+                      IF(COUNT(c.id), JSON_ARRAYAGG(
                             JSON_OBJECT(
                                 'id',
                                 c.id,
                                 'content',
                                 c.content 
-                            )) comments 
-                     FROM
+                            )),NULL) comments 
+                      FROM
                         post p
                         LEFT JOIN user u ON p.user_id = u.id
                         LEFT JOIN comment c ON p.id = c.post_id 
-                     WHERE
-                        p.id = ${id};`;
-    
+                      WHERE
+                        p.id = ?
+                      GROUP BY p.id;`;
+
         const result = await connection.execute(sql, [id]);
-       
+
         return result[0];
     }
 }
